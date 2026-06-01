@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix Session</title>
+</head>
+<body>
+    <h1>Creating Session Data...</h1>
+    <script>
+        const sessionId = 'session_1780312499502_r5wocbmue';
+        
+        const sessionData = {
+            sessionId: sessionId,
+            title: "Interview Session",
+            resumeText: "Sample resume",
+            jobDescription: "Sample job description",
+            difficulty: "medium",
+            totalQuestions: 5,
+            status: "completed",
+            createdAt: new Date().toISOString(),
+            completedAt: new Date().toISOString(),
+            responses: [
+                {
+                    questionId: 1,
+                    questionText: "Describe your experience with React and modern frontend frameworks.",
+                    responseText: "I have 3 years of experience building React applications. I've worked with React Hooks, Context API, and state management libraries like Redux. I've also used Next.js for SSR applications and have experience with TypeScript.",
+                    responseTime: 95,
+                    scores: { overall: 85, accuracy: 88, clarity: 82, depth: 80, relevance: 90, timeEfficiency: 85 },
+                    timestamp: new Date().toISOString()
+                },
+                {
+                    questionId: 2,
+                    questionText: "How do you optimize React application performance?",
+                    responseText: "I use several optimization techniques: React.memo for preventing unnecessary re-renders, useMemo and useCallback for memoization, lazy loading components with React.lazy, code splitting, and virtualizing long lists with react-window.",
+                    responseTime: 110,
+                    scores: { overall: 92, accuracy: 95, clarity: 90, depth: 88, relevance: 95, timeEfficiency: 90 },
+                    timestamp: new Date().toISOString()
+                },
+                {
+                    questionId: 3,
+                    questionText: "Explain the difference between useState and useReducer hooks.",
+                    responseText: "useState is simpler and best for local component state with simple updates. useReducer is better for complex state logic, when next state depends on previous state, or when you need to manage multiple related values. useReducer also makes it easier to test state transitions.",
+                    responseTime: 88,
+                    scores: { overall: 88, accuracy: 90, clarity: 85, depth: 92, relevance: 88, timeEfficiency: 88 },
+                    timestamp: new Date().toISOString()
+                },
+                {
+                    questionId: 4,
+                    questionText: "Describe a challenging project you worked on and how you solved it.",
+                    responseText: "I built a real-time collaborative editing platform. The main challenge was handling concurrent edits. I implemented Operational Transformation algorithm and used WebSockets for real-time sync. I also added conflict resolution and offline support with local storage.",
+                    responseTime: 125,
+                    scores: { overall: 78, accuracy: 80, clarity: 75, depth: 82, relevance: 78, timeEfficiency: 75 },
+                    timestamp: new Date().toISOString()
+                },
+                {
+                    questionId: 5,
+                    questionText: "What is your approach to testing frontend applications?",
+                    responseText: "I follow a testing pyramid approach: Unit tests with Jest for utility functions and components, integration tests with React Testing Library for component interactions, and E2E tests with Cypress for critical user flows. I aim for 80% code coverage.",
+                    responseTime: 102,
+                    scores: { overall: 82, accuracy: 85, clarity: 80, depth: 78, relevance: 85, timeEfficiency: 80 },
+                    timestamp: new Date().toISOString()
+                }
+            ]
+        };
+
+        // Save to localStorage
+        localStorage.setItem(`interview_${sessionId}`, JSON.stringify(sessionData));
+        
+        // Add to user's interview list
+        const userStr = localStorage.getItem("user");
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            const interviewsKey = `interviews_${user.email}`;
+            const interviewsList = JSON.parse(localStorage.getItem(interviewsKey) || "[]");
+            
+            const exists = interviewsList.find(i => i.sessionId === sessionId);
+            if (!exists) {
+                interviewsList.push({
+                    sessionId: sessionId,
+                    title: sessionData.title,
+                    status: "completed",
+                    createdAt: sessionData.createdAt,
+                    completedAt: sessionData.completedAt
+                });
+                localStorage.setItem(interviewsKey, JSON.stringify(interviewsList));
+            }
+        }
+
+        console.log('✅ Session created!');
+        console.log('Redirecting to results...');
+        
+        // Redirect to results page
+        window.location.href = `/results/${sessionId}`;
+    </script>
+</body>
+</html>
